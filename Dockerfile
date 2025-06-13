@@ -1,6 +1,6 @@
 FROM golang:1.24-bookworm AS build
 
-ENV DEFAULT_GPHOTOS_CDP_VERSION=github.com/spraot/gphotos-cdp@41185542
+ENV DEFAULT_GPHOTOS_CDP_VERSION=github.com/slovely/gphotos-cdp@latest
 ENV GO111MODULE=on
 
 ARG GPHOTOS_CDP_VERSION=$DEFAULT_GPHOTOS_CDP_VERSION
@@ -16,7 +16,7 @@ ENV \
     CHROME_PACKAGE=google-chrome-stable_current_amd64.deb \
     DEBIAN_FRONTEND=noninteractive \
     LOGLEVEL=INFO \
-    HEALTHCHECK_HOST="https://hc-ping.com" \
+    HEALTHCHECK_HOST="https://hc.simonlovely.co.uk" \
     HEALTHCHECK_ID= \
     ALBUMS= \
     WORKER_COUNT=6 \
@@ -39,8 +39,9 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=build /go/bin/gphotos-cdp /usr/bin/
 COPY src ./app/
+
 RUN chmod +x /app/*.sh
 
 USER root
-ENTRYPOINT ["/app/start.sh"]
+ENTRYPOINT ["/app/start-sl.sh"]
 CMD [""]

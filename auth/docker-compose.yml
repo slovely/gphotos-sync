@@ -8,5 +8,5 @@ services:
       - ../${PROFILE_DIR:-./profile}:/profile
       - ./desktop:/home/abc/Desktop
     environment:
-      - PUID
-      - PGID
+      - PUID=1000
+      - PGID=1000

@@ -1,0 +1,29 @@
+services:
+  sync:
+    #build:
+    #  context: https://github.com/spraot/gphotos-sync.git
+      # I recommend using a specific commit instead though:
+      # context: https://github.com/spraot/gphotos-sync.git#{FULL_GIT_HASH}
+      # Optionally override the version of gphotos-cdp to use (requires rebuilding the docker image):
+      # args:
+      #   - GPHOTOS_CDP_VERSION=github.com/spraot/gphotos-cdp@COMMITISH
+    build:
+      context: .
+    container_name: gphotos-sync
+    restart: no
+    privileged: true # chrome seems to need this to run as 1000:1000
+    volumes:
+      - ${PROFILE_FOLDER}:/tmp/gphotos-cdp
+      - ${DOWNLOAD_ROOT}/${ALBUM_NAME}:/download
+      - ${DONELIST_FOLDER}:/tmp/done
+    environment:
+      - PUID=1000  # Set to the current user's uid
+      - PGID=1000  # Set to the current user's gid
+      #- CRON_SCHEDULE=27 * * * *
+      #- RESTART_SCHEDULE=26 1 * * 0
+      - HEALTHCHECK_ID=
+      - LOGLEVEL=info
+      - TZ=Europe/London
+      - ALBUMS=${ALBUM_ROOT_URL}
+      - GPHOTOS_CDP_ARGS=-downloadlist /tmp/done/${ALBUM_NAME}
+
